@@ -1,5 +1,6 @@
 package com.bytezone.xmit;
 
+import com.bytezone.xmit.api.*;
 import com.bytezone.xmit.textunit.ControlRecord;
 import com.bytezone.xmit.textunit.Dsorg;
 import com.bytezone.xmit.textunit.Dsorg.Org;
@@ -7,11 +8,10 @@ import com.bytezone.xmit.textunit.TextUnit;
 import com.bytezone.xmit.textunit.TextUnitNumber;
 import com.bytezone.xmit.textunit.TextUnitString;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class XmitReader extends Reader {
+public class AbstractXmitReader extends Reader implements XmitReader {
 
   static final byte[] INMR01 = {
     (byte) 0xE0, (byte) 0xC9, (byte) 0xD5, (byte) 0xD4, (byte) 0xD9, (byte) 0xF0, (byte) 0xF1
@@ -20,13 +20,13 @@ public class XmitReader extends Reader {
   private final List<ControlRecord> controlRecords = new ArrayList<>();
   private int files;
 
-  public XmitReader(File file) {
+  public AbstractXmitReader(File file) {
 
     super(file.getName(), ReaderType.XMIT);
     read(readFile(file));
   }
 
-  public XmitReader(DataFile dataFile) {
+  public AbstractXmitReader(DataFile dataFile) {
 
     super(dataFile.getName(), ReaderType.XMIT);
     read(dataFile.getDataBuffer());
@@ -83,16 +83,12 @@ public class XmitReader extends Reader {
               //    case PDS -> new PdsDataset (this, disposition, getDatasetName ());
               //  case VSAM -> throw new IllegalArgumentException ("VSAM not supported");
               //              };
-              switch (optOrg.get()) {
-                case PS:
-                  currentDataset = new PsDataset(this, disposition, getDatasetName());
-                  break;
-                case PDS:
-                  currentDataset = new PdsDataset(this, disposition, getDatasetName());
-                  break;
-                case VSAM:
-                  throw new IllegalArgumentException("VSAM not supported");
-              }
+              currentDataset =
+                  switch (optOrg.get()) {
+                    case PS -> new PsDataset(this, disposition, getDatasetName());
+                    case PDS -> new PdsDataset(this, disposition, getDatasetName());
+                    case VSAM -> throw new IllegalArgumentException("VSAM not supported");
+                  };
               datasets.add(currentDataset);
               break;
             case INMR06:
@@ -152,7 +148,6 @@ public class XmitReader extends Reader {
     return Optional.empty();
   }
 
-  //  @Override
   public String getDatasetName() {
 
     return getControlRecordString(TextUnit.INMDSNAM);
@@ -173,5 +168,30 @@ public class XmitReader extends Reader {
   public String toString() {
 
     return String.format("Xmit Reader: %s", getFileName());
+  }
+
+  @Override
+  public boolean isIncomplete() {
+    return super.isIncomplete();
+  }
+
+  @Override
+  public String getFileName() {
+    return super.getFileName();
+  }
+
+  @Override
+  public List<XmitHeader> getHeaders() {
+    return List.copyOf(controlRecords);
+  }
+
+  @Override
+  public List<XmitPartitionedDataset> getPartitionedDatasets() {
+    return datasets.stream().filter(Dataset::isPartitionedDataset).map(XmitPartitionedDataset.class::cast).toList();
+  }
+
+  @Override
+  public List<XmitPhysicalSequentialDataset> getPhysicalSequentialDatasets() {
+    return datasets.stream().filter(Dataset::isPhysicalSequential).map(XmitPhysicalSequentialDataset.class::cast).toList();
   }
 }

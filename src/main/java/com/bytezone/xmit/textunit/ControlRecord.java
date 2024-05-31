@@ -1,10 +1,12 @@
 package com.bytezone.xmit.textunit;
 
 import com.bytezone.xmit.Utility;
+import com.bytezone.xmit.api.XmitHeader;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControlRecord {
+public class ControlRecord implements XmitHeader {
 
   private final String name;
   private final List<TextUnit> textUnits = new ArrayList<>();
@@ -119,5 +121,20 @@ public class ControlRecord {
     INMR04,
     INMR05,
     INMR06
+  }
+
+  @Override
+  public int getFileNumber() {
+    return fileNbr;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public List<TextUnit> getTextUnits() {
+    return List.copyOf(textUnits);
   }
 }

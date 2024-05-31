@@ -4,7 +4,7 @@ import com.bytezone.xmit.textunit.Dsorg.Org;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Dataset {
+public abstract class Dataset  {
   final List<Segment> segments = new ArrayList<>();
   private final Reader reader;
   private final String name;

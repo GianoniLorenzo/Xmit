@@ -117,6 +117,6 @@ class XmitSegment extends Segment {
   boolean isXmit() {
 
     BlockPointer blockPointer = rawBlockPointers.get(0);
-    return Utility.matches(XmitReader.INMR01, blockPointer.buffer, blockPointer.offset + 1);
+    return Utility.matches(AbstractXmitReader.INMR01, blockPointer.buffer, blockPointer.offset + 1);
   }
 }

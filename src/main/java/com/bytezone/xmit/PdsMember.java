@@ -1,5 +1,7 @@
 package com.bytezone.xmit;
 
+import com.bytezone.xmit.api.XmitMember;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class PdsMember extends DataFile implements Iterable<DataBlock> {
+public class PdsMember extends DataFile implements Iterable<DataBlock>, XmitMember {
 
   private final List<DataBlock> dataBlocks; // PDS & PDS/E
   private final List<DataBlock> extraDataBlocks; // PDSE only
@@ -250,6 +252,16 @@ public class PdsMember extends DataFile implements Iterable<DataBlock> {
   public Iterator<DataBlock> iterator() {
 
     return dataBlocks.iterator();
+  }
+
+  @Override
+  public CatalogEntry getCatalogEntry() {
+    return catalogEntry;
+  }
+
+  @Override
+  public String getContent() {
+    return String.join("\n", getLines());
   }
 
   class SizeCount {

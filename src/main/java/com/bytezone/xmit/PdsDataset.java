@@ -1,12 +1,16 @@
 package com.bytezone.xmit;
 
 import com.bytezone.xmit.CatalogEntry.ModuleType;
+import com.bytezone.xmit.api.XmitComment;
+import com.bytezone.xmit.api.XmitMember;
+import com.bytezone.xmit.api.XmitPartitionedDataset;
+
 import java.util.*;
 
 // useful: https://stackoverflow.com/questions/28929563/
 // how-to-manipulate-the-result-of-a-future-in-javafx
 
-public class PdsDataset extends Dataset implements Iterable<CatalogEntry> {
+public class PdsDataset extends Dataset implements Iterable<CatalogEntry>, XmitPartitionedDataset {
 
   private static final int DIR_BLOCK_LENGTH = 0x114;
 
@@ -106,7 +110,8 @@ public class PdsDataset extends Dataset implements Iterable<CatalogEntry> {
     Map<Long, List<CatalogEntry>> catalogMap = new TreeMap<>();
     while (segmentNbr < segments.size()) {
       Segment segment = segments.get(segmentNbr++);
-      if (!addCatalogEntries(segment.getRawBuffer(), catalogMap)) break;
+      if (!addCatalogEntries(segment.getRawBuffer(), catalogMap))
+        break;
     }
 
     // read data blocks
@@ -258,5 +263,17 @@ public class PdsDataset extends Dataset implements Iterable<CatalogEntry> {
   public Iterator<CatalogEntry> iterator() {
 
     return catalogEntries.iterator();
+  }
+  @Override
+  public List<XmitMember> getMembers() {
+    return catalogEntries.stream()
+            .map(CatalogEntry::getMember)
+            .map(XmitMember.class::cast)
+            .toList();
+  }
+
+  @Override
+  public String getName() {
+    return super.getName();
   }
 }

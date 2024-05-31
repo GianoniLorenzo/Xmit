@@ -184,7 +184,7 @@ public abstract class DataFile implements Comparable<DataFile> {
   private void xmitLines() {
 
     try {
-      XmitReader reader = new XmitReader(this); // fix this!!
+      AbstractXmitReader reader = new AbstractXmitReader(this); // fix this!!
 
       for (ControlRecord controlRecord : reader.getControlRecords())
         lines.add(String.format("%s", controlRecord));

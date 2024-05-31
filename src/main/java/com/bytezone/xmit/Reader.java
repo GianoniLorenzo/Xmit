@@ -1,5 +1,7 @@
 package com.bytezone.xmit;
 
+import com.bytezone.xmit.api.XmitReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
