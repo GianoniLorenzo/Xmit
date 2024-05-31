@@ -1,9 +1,7 @@
 package com.bytezone.xmit;
 
-// -----------------------------------------------------------------------------------//
-class TtlCalculator          // not used
-// -----------------------------------------------------------------------------------//
-{
+class TtlCalculator // not used
+ {
   private int ttr;
 
   // not used
@@ -11,18 +9,14 @@ class TtlCalculator          // not used
   private CopyR1 copyR1;
   private CopyR2 copyR2;
 
-  // ---------------------------------------------------------------------------------//
-  void setCopyRecords (CopyR1 copyR1, CopyR2 copyR2)
-  // ---------------------------------------------------------------------------------//
-  {
+  void setCopyRecords(CopyR1 copyR1, CopyR2 copyR2) {
+
     this.copyR1 = copyR1;
     this.copyR2 = copyR2;
   }
 
-  // ---------------------------------------------------------------------------------//
-  long notUsed ()
-  // ---------------------------------------------------------------------------------//
-  {
+  long notUsed() {
+
     int extents = copyR2.buffer[0] & 0xFF;
     //    int mult = copyR2.buffer[31];   // 0x0F;
     int mult = 0x0F;
@@ -55,37 +49,32 @@ class TtlCalculator          // not used
 
     int index = ((ttr & 0x00FF00) >>> 8) / mult;
 
-    long lo = Utility.getFourBytes (copyR2.buffer, index * 16 + 22);
-    long hi = Utility.getFourBytes (copyR2.buffer, index * 16 + 26);
+    long lo = Utility.getFourBytes(copyR2.buffer, index * 16 + 22);
+    long hi = Utility.getFourBytes(copyR2.buffer, index * 16 + 26);
     //      System.out.printf ("%02X  Range: %08X : %08X%n", index, lo, hi);
 
-    byte[] temp = convert (index, mult);
+    byte[] temp = convert(index, mult);
 
-    long val = Utility.getValue (temp, 0, 4);     // ignore last byte
-    System.out.printf ("%02X  %06X -> %s ", index, ttr, Utility.getHexValues (temp));
+    long val = Utility.getValue(temp, 0, 4); // ignore last byte
+    System.out.printf("%02X  %06X -> %s ", index, ttr, Utility.getHexValues(temp));
 
-    if (lo <= val && hi >= val)
-    {
-      System.out.println ("OK");
+    if (lo <= val && hi >= val) {
+      System.out.println("OK");
       ttl = temp;
-    }
-    else
-    {
-      System.out.printf (": Out of range%n");
+    } else {
+      System.out.printf(": Out of range%n");
     }
 
-    return Utility.getValue (ttl, 0, 5);
+    return Utility.getValue(ttl, 0, 5);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private byte[] convert (int index, int mult)
-  // ---------------------------------------------------------------------------------//
-  {
+  private byte[] convert(int index, int mult) {
+
     byte[] tt = new byte[5];
 
     int xxxx = (ttr & 0xFFFF00) >>> 8;
-    int yyyy = Utility.getTwoBytes (copyR2.buffer, index * 16 + 22);
-    int zzzz = Utility.getTwoBytes (copyR2.buffer, index * 16 + 24);
+    int yyyy = Utility.getTwoBytes(copyR2.buffer, index * 16 + 22);
+    int zzzz = Utility.getTwoBytes(copyR2.buffer, index * 16 + 24);
 
     int dddd = (xxxx + zzzz) / mult + yyyy - index;
 

@@ -1,73 +1,55 @@
 package com.bytezone.xmit.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.bytezone.xmit.CatalogEntry;
 import com.bytezone.xmit.DataFile;
 import com.bytezone.xmit.PdsMember;
 import com.bytezone.xmit.gui.XmitTree.TreeNodeListener;
-
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.input.KeyCode;
 
-// -----------------------------------------------------------------------------------//
-class BlocksTab extends XmitTextTab implements TreeNodeListener, TableItemSelectionListener
-// -----------------------------------------------------------------------------------//
-{
+class BlocksTab extends XmitTextTab implements TreeNodeListener, TableItemSelectionListener {
+
   private TreeNodeData nodeData;
   private DataFile dataFile;
 
-  // ---------------------------------------------------------------------------------//
-  public BlocksTab (String title, KeyCode keyCode)
-  // ---------------------------------------------------------------------------------//
-  {
-    super (title, keyCode);
+  public BlocksTab(String title, KeyCode keyCode) {
+
+    super(title, keyCode);
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  List<String> getLines ()
-  // ---------------------------------------------------------------------------------//
-  {
-    List<String> lines = new ArrayList<> ();
+  List<String> getLines() {
 
-    if (dataFile == null)
-      return lines;
+    List<String> lines = new ArrayList<>();
 
-    if (nodeData.isPartitionedDataset ())
-    {
+    if (dataFile == null) return lines;
+
+    if (nodeData.isPartitionedDataset()) {
       PdsMember member = ((PdsMember) dataFile);
-      member.listSizeCounts (lines);
-      member.getText (lines);
+      member.listSizeCounts(lines);
+      member.getText(lines);
       //        lines.add (member.getText ());        // should split
-    }
-    else
-      lines.add (dataFile.toString ());     // should split
+    } else lines.add(dataFile.toString()); // should split
 
     return lines;
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public void treeNodeSelected (TreeNodeData nodeData)
-  // ---------------------------------------------------------------------------------//
-  {
+  public void treeNodeSelected(TreeNodeData nodeData) {
+
     this.nodeData = nodeData;
 
-    if (nodeData.isPhysicalSequentialDataset ())
-      dataFile = nodeData.getDataFile ();
-    else
-      dataFile = null;
+    if (nodeData.isPhysicalSequentialDataset()) dataFile = nodeData.getDataFile();
+    else dataFile = null;
 
-    refresh ();
+    refresh();
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public void tableItemSelected (CatalogEntry catalogEntry)
-  // ---------------------------------------------------------------------------------//
-  {
-    dataFile = catalogEntry == null ? null : catalogEntry.getMember ();
-    refresh ();
+  public void tableItemSelected(CatalogEntry catalogEntry) {
+
+    dataFile = catalogEntry == null ? null : catalogEntry.getMember();
+    refresh();
   }
 }

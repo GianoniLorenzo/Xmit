@@ -2,19 +2,21 @@ package com.bytezone.xmit;
 
 // https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/
 // com.ibm.zos.v2r3.ieab200/destow.htm
-// -----------------------------------------------------------------------------------//
-public class LoadModule extends CatalogEntry
-// -----------------------------------------------------------------------------------//
-{
+
+public class LoadModule extends CatalogEntry {
+
+  public final boolean scatter;
+  public final boolean lpo;
+  public final boolean ssi;
+  public final boolean apfBlock;
+  public final boolean attr;
   final boolean reentrant;
   final boolean reusable;
   final boolean overlay;
   final boolean test;
   final boolean loadOnly;
-  public final boolean scatter;
   final boolean executable;
   final boolean multiBlock;
-
   final boolean dc;
   final boolean zeroOrg;
   final boolean zeroEp;
@@ -23,16 +25,10 @@ public class LoadModule extends CatalogEntry
   final boolean sym;
   final boolean fLvl;
   final boolean refreshable;
-
   final boolean aosLinkEditor;
-  public final boolean lpo;
   final boolean pageAligned;
-  public final boolean ssi;
-  public final boolean apfBlock;
   final boolean ptb3Valid;
   final boolean objSigned;
-  public final boolean attr;
-
   final boolean nameGen;
   final boolean free2;
   final boolean free3;
@@ -52,23 +48,21 @@ public class LoadModule extends CatalogEntry
   long ssiWord;
   int aliasTtr;
 
-  // ---------------------------------------------------------------------------------//
-  LoadModule (byte[] buffer)
-  // ---------------------------------------------------------------------------------//
-  {
-    super (ModuleType.LOAD, buffer);
+  LoadModule(byte[] buffer) {
 
-    ttrText = (int) Utility.getValue (buffer, 12, 3);
+    super(ModuleType.LOAD, buffer);
+
+    ttrText = (int) Utility.getValue(buffer, 12, 3);
     int zero = buffer[15] & 0xFF;
-    ttrNoteList = (int) Utility.getValue (buffer, 16, 3);   // or ttrScatter
+    ttrNoteList = (int) Utility.getValue(buffer, 16, 3); // or ttrScatter
     notes = buffer[19] & 0xFF;
 
     byte attr1 = buffer[20];
     byte attr2 = buffer[21];
 
-    storage = (int) Utility.getValue (buffer, 22, 3);
-    firstTextBlock = Utility.getTwoBytes (buffer, 25);
-    epa = (int) Utility.getValue (buffer, 27, 3);
+    storage = (int) Utility.getValue(buffer, 22, 3);
+    firstTextBlock = Utility.getTwoBytes(buffer, 25);
+    epa = (int) Utility.getValue(buffer, 27, 3);
 
     byte vsFlag1 = buffer[30];
     byte vsFlag2 = buffer[31];
@@ -112,50 +106,42 @@ public class LoadModule extends CatalogEntry
 
     aMode = aaMode == 0 ? 24 : aaMode == 1 ? 64 : aaMode == 2 ? 31 : 255;
 
-    if (scatter)
-    {
-      int slsz = (int) Utility.getValue (buffer, ptr, 2);
-      int ttsz = (int) Utility.getValue (buffer, ptr + 2, 2);
-      int esdt = (int) Utility.getValue (buffer, ptr + 4, 2);
-      int esdc = (int) Utility.getValue (buffer, ptr + 6, 2);
+    if (scatter) {
+      int slsz = (int) Utility.getValue(buffer, ptr, 2);
+      int ttsz = (int) Utility.getValue(buffer, ptr + 2, 2);
+      int esdt = (int) Utility.getValue(buffer, ptr + 4, 2);
+      int esdc = (int) Utility.getValue(buffer, ptr + 6, 2);
       ptr += 8;
     }
 
-    if (isAlias ())
-    {
-      if (ptr + 11 <= buffer.length)
-      {
-        aliasTtr = (int) Utility.getValue (buffer, ptr, 3);
-        setAliasName (Utility.getString (buffer, ptr + 3, 8).trim ());
+    if (isAlias()) {
+      if (ptr + 11 <= buffer.length) {
+        aliasTtr = (int) Utility.getValue(buffer, ptr, 3);
+        setAliasName(Utility.getString(buffer, ptr + 3, 8).trim());
       }
       ptr += 11;
     }
 
-    if (ssi)
-    {
-      if (ptr % 2 == 1)
-        ptr++;
-      ssiWord = Utility.getValue (buffer, ptr, 4);
+    if (ssi) {
+      if (ptr % 2 == 1) ptr++;
+      ssiWord = Utility.getValue(buffer, ptr, 4);
       ptr += 4;
     }
 
-    if (apfBlock)
-    {
+    if (apfBlock) {
       int len1 = buffer[ptr++] & 0xFF;
       apf = buffer[ptr++] & 0xFF;
     }
 
-    if (lpo)
-    {
+    if (lpo) {
       int len1 = buffer[ptr++] & 0xFF;
-      long fullWord1 = Utility.getValue (buffer, ptr + 1, 4);
-      long fullWord2 = Utility.getValue (buffer, ptr + 5, 4);
-      long fullWord3 = Utility.getValue (buffer, ptr + 9, 4);
+      long fullWord1 = Utility.getValue(buffer, ptr + 1, 4);
+      long fullWord2 = Utility.getValue(buffer, ptr + 5, 4);
+      long fullWord3 = Utility.getValue(buffer, ptr + 9, 4);
       ptr += 13;
     }
 
-    if (false && attr)
-    {
+    if (false) {
       int byte0 = buffer[ptr++] & 0xFF;
       int byte1 = buffer[ptr++] & 0xFF;
       int reserved = buffer[ptr++] & 0xFF;
@@ -167,21 +153,17 @@ public class LoadModule extends CatalogEntry
     //      System.out.println (Utility.getHexDump (buffer, ptr, buffer.length - ptr));
   }
 
-  // ---------------------------------------------------------------------------------//
-  public static String getDebugHeader ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return CatalogEntry.getDebugHeader ()
+  public static String getDebugHeader() {
+
+    return CatalogEntry.getDebugHeader()
         + "-ttr2- 00 -ttr3- nt a1 a2 --stor-- -txt- --epa--- v1 v2 v3  "
         + "------- scatter -------  ------------- alias ------------  "
         + "--- ssi ---  -apf-  ----------------- lpo ----------------";
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public String getDebugLine ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public String getDebugLine() {
+
     String scatterText = "";
     String aliasText = "";
     String ssiText = "";
@@ -190,41 +172,34 @@ public class LoadModule extends CatalogEntry
     String extra = "";
     int ptr = 33;
 
-    if (scatter)
-    {
-      scatterText = Utility.getHexValues (directoryData, ptr, 8);
+    if (scatter) {
+      scatterText = Utility.getHexValues(directoryData, ptr, 8);
       ptr += 8;
     }
 
-    if (isAlias ())
-    {
+    if (isAlias()) {
       if (ptr + 11 <= directoryData.length)
-        aliasText = Utility.getHexValuesWithText (directoryData, ptr, 11);
+        aliasText = Utility.getHexValuesWithText(directoryData, ptr, 11);
       ptr += 11;
     }
 
-    if (ssi)
-    {
-      if (ptr % 2 == 1)
-        ptr++;
-      ssiText = Utility.getHexValues (directoryData, ptr, 4);
+    if (ssi) {
+      if (ptr % 2 == 1) ptr++;
+      ssiText = Utility.getHexValues(directoryData, ptr, 4);
       ptr += 4;
     }
 
-    if (apfBlock)
-    {
-      apfText = Utility.getHexValues (directoryData, ptr, 2);
+    if (apfBlock) {
+      apfText = Utility.getHexValues(directoryData, ptr, 2);
       ptr += 2;
     }
 
-    if (lpo)
-    {
-      lpoText = Utility.getHexValues (directoryData, ptr, 13);
+    if (lpo) {
+      lpoText = Utility.getHexValues(directoryData, ptr, 13);
       ptr += 13;
     }
 
-    if (false && attr)
-    {
+    if (false) {
       int byte0 = directoryData[ptr++] & 0xFF;
       int byte1 = directoryData[ptr++] & 0xFF;
       int reserved = directoryData[ptr++] & 0xFF;
@@ -232,94 +207,82 @@ public class LoadModule extends CatalogEntry
     }
 
     if (ptr < directoryData.length)
-      extra =
-          Utility.getHexValuesWithText (directoryData, ptr, directoryData.length - ptr);
+      extra = Utility.getHexValuesWithText(directoryData, ptr, directoryData.length - ptr);
 
-    long ttr2 = Utility.getValue (directoryData, 12, 3);
+    long ttr2 = Utility.getValue(directoryData, 12, 3);
     int zero = directoryData[15] & 0xFF;
-    long ttr3 = Utility.getValue (directoryData, 16, 3);
-    String hex = Utility.getHexValues (directoryData, 19, 14);
+    long ttr3 = Utility.getValue(directoryData, 16, 3);
+    String hex = Utility.getHexValues(directoryData, 19, 14);
 
-    return String.format ("%23s %06X %02X %06X %-42s %-24s %-33s %-12s %-6s %-39s %s",
-        super.toString (), ttr2, zero, ttr3, hex, scatterText, aliasText, ssiText,
-        apfText, lpoText, extra).trim ();
+    return String.format(
+            "%23s %06X %02X %06X %-42s %-24s %-33s %-12s %-6s %-39s %s",
+            super.toString(),
+            ttr2,
+            zero,
+            ttr3,
+            hex,
+            scatterText,
+            aliasText,
+            ssiText,
+            apfText,
+            lpoText,
+            extra)
+        .trim();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public int getStorage ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public int getStorage() {
+
     return storage;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public int getEpa ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public int getEpa() {
+
     return epa;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public int getAMode ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public int getAMode() {
+
     return aMode;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public int getRMode ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public int getRMode() {
+
     return rMode;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public long getSsi ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public long getSsi() {
+
     return ssiWord;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public boolean isApf ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public boolean isApf() {
+
     return apf == 1;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public boolean isReentrant ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public boolean isReentrant() {
+
     return reentrant;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public boolean isReusable ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public boolean isReusable() {
+
     return reusable;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public boolean isOverlay ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public boolean isOverlay() {
+
     return overlay;
   }
 
-  // ---------------------------------------------------------------------------------//
-  public boolean isTest ()
-  // ---------------------------------------------------------------------------------//
-  {
+  public boolean isTest() {
+
     return test;
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public String toString ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return String.format ("%s  %-8s  ", isAlias () ? "A" : ".", getMemberName ());
+  public String toString() {
+
+    return String.format("%s  %-8s  ", isAlias() ? "A" : ".", getMemberName());
   }
 }

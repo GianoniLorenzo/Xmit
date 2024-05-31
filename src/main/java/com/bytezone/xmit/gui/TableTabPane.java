@@ -1,27 +1,22 @@
 package com.bytezone.xmit.gui;
 
 import com.bytezone.appbase.TabPaneBase;
-
 import javafx.scene.input.KeyCode;
 
-// -----------------------------------------------------------------------------------//
-class TableTabPane extends TabPaneBase
-// -----------------------------------------------------------------------------------//
-{
-  final HeadersTab headersTab = new HeadersTab ("Headers", KeyCode.H);
-  final CommentsTab commentsTab = new CommentsTab ("Comments", KeyCode.C);
-  final MembersTab membersTab = new MembersTab ("Members", KeyCode.M);
+class TableTabPane extends TabPaneBase {
 
-  // ---------------------------------------------------------------------------------//
-  public TableTabPane (String prefsId)
-  // ---------------------------------------------------------------------------------//
-  {
-    super (prefsId);
+  final HeadersTab headersTab = new HeadersTab("Headers", KeyCode.H);
+  final CommentsTab commentsTab = new CommentsTab("Comments", KeyCode.C);
+  final MembersTab membersTab = new MembersTab("Members", KeyCode.M);
 
-    add (headersTab);
-    add (commentsTab);
-    add (membersTab);
+  public TableTabPane(String prefsId) {
 
-    setDefaultTab (2);
+    super(prefsId);
+
+    add(headersTab);
+    add(commentsTab);
+    add(membersTab);
+
+    setDefaultTab(2);
   }
 }

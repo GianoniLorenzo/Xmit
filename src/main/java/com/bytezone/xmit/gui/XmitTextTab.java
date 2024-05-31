@@ -1,9 +1,7 @@
 package com.bytezone.xmit.gui;
 
-import java.util.List;
-
 import com.bytezone.appbase.TextTabBase;
-
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -12,59 +10,47 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-// -----------------------------------------------------------------------------------//
-public abstract class XmitTextTab extends TextTabBase
-// -----------------------------------------------------------------------------------//
-{
-  private final TextFlow textFlow = new TextFlow ();
-  private final ScrollPane scrollPane = new ScrollPane (textFlow);
+public abstract class XmitTextTab extends TextTabBase {
 
-  XmitTextFormatter textFormatter = new XmitTextFormatter ();
+  private final TextFlow textFlow = new TextFlow();
+  private final ScrollPane scrollPane = new ScrollPane(textFlow);
 
-  // ---------------------------------------------------------------------------------//
-  public XmitTextTab (String title, KeyCode keyCode)
-  // ---------------------------------------------------------------------------------//
-  {
-    super (title, keyCode);
+  XmitTextFormatter textFormatter = new XmitTextFormatter();
 
-    textFlow.setLineSpacing (1);
+  public XmitTextTab(String title, KeyCode keyCode) {
 
-    scrollPane.setPadding (new Insets (5, 5, 5, 5));
-    scrollPane.setStyle ("-fx-background: white;-fx-border-color: lightgray;");
+    super(title, keyCode);
 
-    setContent (scrollPane);
+    textFlow.setLineSpacing(1);
+
+    scrollPane.setPadding(new Insets(5, 5, 5, 5));
+    scrollPane.setStyle("-fx-background: white;-fx-border-color: lightgray;");
+
+    setContent(scrollPane);
   }
 
-  // ---------------------------------------------------------------------------------//
-  abstract List<String> getLines ();
-  // ---------------------------------------------------------------------------------//
+  abstract List<String> getLines();
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public void update ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (isValid ())
-      return;
+  public void update() {
 
-    setValid (true);
+    if (isValid()) return;
 
-    textFlow.getChildren ().setAll (textFormatter.format (getLines ()));
+    setValid(true);
 
-    scrollPane.setVvalue (0);
-    scrollPane.setHvalue (0);
+    textFlow.getChildren().setAll(textFormatter.format(getLines()));
+
+    scrollPane.setVvalue(0);
+    scrollPane.setHvalue(0);
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public void setFont (Font font)
-  // ---------------------------------------------------------------------------------//
-  {
-    super.setFont (font);
+  public void setFont(Font font) {
 
-    textFormatter.setFont (font);
+    super.setFont(font);
 
-    for (Node node : textFlow.getChildren ())
-      ((Text) node).setFont (font);
+    textFormatter.setFont(font);
+
+    for (Node node : textFlow.getChildren()) ((Text) node).setFont(font);
   }
 }

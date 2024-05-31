@@ -8,34 +8,30 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 
-// -----------------------------------------------------------------------------------//
-class HeaderBar extends HBox
-// -----------------------------------------------------------------------------------//
-{
-  static Font headingFont = Font.font ("Lucida Sans Typewriter", 14);
+class HeaderBar extends HBox {
 
-  Label leftLabel = new Label ();
-  Label rightLabel = new Label ();
+  static Font headingFont = Font.font("Lucida Sans Typewriter", 14);
 
-  // ---------------------------------------------------------------------------------//
-  public HeaderBar ()
-  // ---------------------------------------------------------------------------------//
-  {
-    super (10);
+  Label leftLabel = new Label();
+  Label rightLabel = new Label();
 
-    setPrefHeight (20);
-    setPadding (new Insets (6, 10, 6, 10));
-    setAlignment (Pos.CENTER_LEFT);
+  public HeaderBar() {
 
-    Region filler = new Region ();
-    HBox.setHgrow (filler, Priority.ALWAYS);
+    super(10);
 
-    getChildren ().addAll (leftLabel, filler, rightLabel);
+    setPrefHeight(20);
+    setPadding(new Insets(6, 10, 6, 10));
+    setAlignment(Pos.CENTER_LEFT);
 
-    leftLabel.setAlignment (Pos.CENTER_LEFT);
-    rightLabel.setAlignment (Pos.CENTER_RIGHT);
+    Region filler = new Region();
+    HBox.setHgrow(filler, Priority.ALWAYS);
 
-    leftLabel.setFont (headingFont);
-    rightLabel.setFont (headingFont);
+    getChildren().addAll(leftLabel, filler, rightLabel);
+
+    leftLabel.setAlignment(Pos.CENTER_LEFT);
+    rightLabel.setAlignment(Pos.CENTER_RIGHT);
+
+    leftLabel.setFont(headingFont);
+    rightLabel.setFont(headingFont);
   }
 }

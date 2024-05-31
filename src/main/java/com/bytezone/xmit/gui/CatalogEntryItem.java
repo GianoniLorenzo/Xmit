@@ -1,18 +1,14 @@
 package com.bytezone.xmit.gui;
 
-import java.time.LocalDate;
-
 import com.bytezone.xmit.BasicModule;
 import com.bytezone.xmit.CatalogEntry;
 import com.bytezone.xmit.LoadModule;
 import com.bytezone.xmit.Utility.FileType;
-
+import java.time.LocalDate;
 import javafx.beans.property.*;
 
-// -----------------------------------------------------------------------------------//
-public class CatalogEntryItem                   // must be public
-// -----------------------------------------------------------------------------------//
-{
+public class CatalogEntryItem // must be public
+ {
   private final CatalogEntry catalogEntry;
 
   private StringProperty memberName;
@@ -38,473 +34,342 @@ public class CatalogEntryItem                   // must be public
   private StringProperty apf;
   private StringProperty attr;
 
-  // ---------------------------------------------------------------------------------//
-  CatalogEntryItem (CatalogEntry catalogEntry)
-  // ---------------------------------------------------------------------------------//
-  {
+  CatalogEntryItem(CatalogEntry catalogEntry) {
+
     this.catalogEntry = catalogEntry;
 
-    setMemberName (catalogEntry.getMemberName ());
-    setAliasName (catalogEntry.getAliasName ());
-    setBytes (catalogEntry.getDataLength ());
-    setType (catalogEntry.getFileType ());
+    setMemberName(catalogEntry.getMemberName());
+    setAliasName(catalogEntry.getAliasName());
+    setBytes(catalogEntry.getDataLength());
+    setType(catalogEntry.getFileType());
 
-    switch (catalogEntry.getModuleType ())
-    {
+    switch (catalogEntry.getModuleType()) {
       case BASIC:
         BasicModule module = (BasicModule) catalogEntry;
-        setUserName (module.getUserName ());
-        setSize (module.getSize ());
-        setInit (module.getInit ());
-        setDateCreated (module.getDateCreated ());
-        setDateModified (module.getDateModified ());
-        setTime (module.getTime ());
-        setVersion (module.getVersion ());
+        setUserName(module.getUserName());
+        setSize(module.getSize());
+        setInit(module.getInit());
+        setDateCreated(module.getDateCreated());
+        setDateModified(module.getDateModified());
+        setTime(module.getTime());
+        setVersion(module.getVersion());
         break;
 
       case LOAD:
         LoadModule loadModule = (LoadModule) catalogEntry;
-        setEpa (loadModule.getEpa ());
-        setStorage (loadModule.getStorage ());
-        setAMode (loadModule.getAMode ());
-        setRMode (loadModule.getRMode ());
-        setSsi ((int) loadModule.getSsi ());
-        setApf (loadModule.isApf () ? "apf" : "");
-        setAttr (String.format ("%2s %2s %2s %2s",    //
-            loadModule.isReentrant () ? "RN" : "",        //
-            loadModule.isReusable () ? "RU" : "",         //
-            loadModule.isOverlay () ? "OV" : "",          //
-            loadModule.isTest () ? "TS" : ""));
+        setEpa(loadModule.getEpa());
+        setStorage(loadModule.getStorage());
+        setAMode(loadModule.getAMode());
+        setRMode(loadModule.getRMode());
+        setSsi((int) loadModule.getSsi());
+        setApf(loadModule.isApf() ? "apf" : "");
+        setAttr(
+            String.format(
+                "%2s %2s %2s %2s", //
+                loadModule.isReentrant() ? "RN" : "", //
+                loadModule.isReusable() ? "RU" : "", //
+                loadModule.isOverlay() ? "OV" : "", //
+                loadModule.isTest() ? "TS" : ""));
         break;
     }
   }
 
-  // ---------------------------------------------------------------------------------//
-  CatalogEntry getCatalogEntry ()
-  // ---------------------------------------------------------------------------------//
-  {
+  CatalogEntry getCatalogEntry() {
+
     return catalogEntry;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setMemberName (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    memberNameProperty ().set (value);
+  public final String getMemberName() {
+
+    return memberNameProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getMemberName ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return memberNameProperty ().get ();
+  private void setMemberName(String value) {
+
+    memberNameProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty memberNameProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (memberName == null)
-      memberName = new SimpleStringProperty ();
+  private StringProperty memberNameProperty() {
+
+    if (memberName == null) memberName = new SimpleStringProperty();
     return memberName;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setUserName (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    userNameProperty ().set (value);
+  public final String getUserName() {
+
+    return userNameProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getUserName ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return userNameProperty ().get ();
+  private void setUserName(String value) {
+
+    userNameProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty userNameProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (userName == null)
-      userName = new SimpleStringProperty ();
+  private StringProperty userNameProperty() {
+
+    if (userName == null) userName = new SimpleStringProperty();
     return userName;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setAliasName (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    aliasNameProperty ().set (value);
+  public final String getAliasName() {
+
+    return aliasNameProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getAliasName ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return aliasNameProperty ().get ();
+  private void setAliasName(String value) {
+
+    aliasNameProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty aliasNameProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (aliasName == null)
-      aliasName = new SimpleStringProperty ();
+  private StringProperty aliasNameProperty() {
+
+    if (aliasName == null) aliasName = new SimpleStringProperty();
     return aliasName;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setSize (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    sizeProperty ().set (value);
+  public final int getSize() {
+
+    return sizeProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getSize ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return sizeProperty ().get ();
+  private void setSize(int value) {
+
+    sizeProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty sizeProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (size == null)
-      size = new SimpleIntegerProperty ();
+  private IntegerProperty sizeProperty() {
+
+    if (size == null) size = new SimpleIntegerProperty();
     return size;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setBytes (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    bytesProperty ().set (value);
+  public final int getBytes() {
+
+    return bytesProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getBytes ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return bytesProperty ().get ();
+  private void setBytes(int value) {
+
+    bytesProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty bytesProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (bytes == null)
-      bytes = new SimpleIntegerProperty ();
+  private IntegerProperty bytesProperty() {
+
+    if (bytes == null) bytes = new SimpleIntegerProperty();
     return bytes;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setInit (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    initProperty ().set (value);
+  public final int getInit() {
+
+    return initProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getInit ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return initProperty ().get ();
+  private void setInit(int value) {
+
+    initProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty initProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (init == null)
-      init = new SimpleIntegerProperty ();
+  private IntegerProperty initProperty() {
+
+    if (init == null) init = new SimpleIntegerProperty();
     return init;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setDateCreated (LocalDate value)
-  // ---------------------------------------------------------------------------------//
-  {
-    dateCreatedProperty ().set (value);
+  public LocalDate getDateCreated() {
+
+    return dateCreatedProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public LocalDate getDateCreated ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return dateCreatedProperty ().get ();
+  private void setDateCreated(LocalDate value) {
+
+    dateCreatedProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private ObjectProperty<LocalDate> dateCreatedProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (dateCreated == null)
-      dateCreated = new SimpleObjectProperty<> ();
+  private ObjectProperty<LocalDate> dateCreatedProperty() {
+
+    if (dateCreated == null) dateCreated = new SimpleObjectProperty<>();
     return dateCreated;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setDateModified (LocalDate value)
-  // ---------------------------------------------------------------------------------//
-  {
-    dateModifiedProperty ().set (value);
+  public LocalDate getDateModified() {
+
+    return dateModifiedProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public LocalDate getDateModified ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return dateModifiedProperty ().get ();
+  private void setDateModified(LocalDate value) {
+
+    dateModifiedProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private ObjectProperty<LocalDate> dateModifiedProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (dateModified == null)
-      dateModified = new SimpleObjectProperty<> ();
+  private ObjectProperty<LocalDate> dateModifiedProperty() {
+
+    if (dateModified == null) dateModified = new SimpleObjectProperty<>();
     return dateModified;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setTime (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    timeProperty ().set (value);
+  public final String getTime() {
+
+    return timeProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getTime ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return timeProperty ().get ();
+  private void setTime(String value) {
+
+    timeProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty timeProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (time == null)
-      time = new SimpleStringProperty ();
+  private StringProperty timeProperty() {
+
+    if (time == null) time = new SimpleStringProperty();
     return time;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setType (FileType value)
-  // ---------------------------------------------------------------------------------//
-  {
-    typeProperty ().set (value);
+  public final FileType getType() {
+
+    return typeProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final FileType getType ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return typeProperty ().get ();
+  private void setType(FileType value) {
+
+    typeProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private ObjectProperty<FileType> typeProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (type == null)
-      type = new SimpleObjectProperty<> ();
+  private ObjectProperty<FileType> typeProperty() {
+
+    if (type == null) type = new SimpleObjectProperty<>();
     return type;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setVersion (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    versionProperty ().set (value);
+  public final String getVersion() {
+
+    return versionProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getVersion ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return versionProperty ().get ();
+  private void setVersion(String value) {
+
+    versionProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty versionProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (version == null)
-      version = new SimpleStringProperty ();
+  private StringProperty versionProperty() {
+
+    if (version == null) version = new SimpleStringProperty();
     return version;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setStorage (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    storageProperty ().set (value);
+  public final int getStorage() {
+
+    return storageProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getStorage ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return storageProperty ().get ();
+  private void setStorage(int value) {
+
+    storageProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty storageProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (storage == null)
-      storage = new SimpleIntegerProperty ();
+  private IntegerProperty storageProperty() {
+
+    if (storage == null) storage = new SimpleIntegerProperty();
     return storage;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setEpa (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    epaProperty ().set (value);
+  public final int getEpa() {
+
+    return epaProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getEpa ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return epaProperty ().get ();
+  private void setEpa(int value) {
+
+    epaProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty epaProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (epa == null)
-      epa = new SimpleIntegerProperty ();
+  private IntegerProperty epaProperty() {
+
+    if (epa == null) epa = new SimpleIntegerProperty();
     return epa;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setAMode (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    aModeProperty ().set (value);
+  public final int getAMode() {
+
+    return aModeProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getAMode ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return aModeProperty ().get ();
+  private void setAMode(int value) {
+
+    aModeProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty aModeProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (aMode == null)
-      aMode = new SimpleIntegerProperty ();
+  private IntegerProperty aModeProperty() {
+
+    if (aMode == null) aMode = new SimpleIntegerProperty();
     return aMode;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setRMode (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    rModeProperty ().set (value);
+  public final int getRMode() {
+
+    return rModeProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getRMode ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return rModeProperty ().get ();
+  private void setRMode(int value) {
+
+    rModeProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty rModeProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (rMode == null)
-      rMode = new SimpleIntegerProperty ();
+  private IntegerProperty rModeProperty() {
+
+    if (rMode == null) rMode = new SimpleIntegerProperty();
     return rMode;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setSsi (int value)
-  // ---------------------------------------------------------------------------------//
-  {
-    ssiProperty ().set (value);
+  public final int getSsi() {
+
+    return ssiProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final int getSsi ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return ssiProperty ().get ();
+  private void setSsi(int value) {
+
+    ssiProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private IntegerProperty ssiProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (ssi == null)
-      ssi = new SimpleIntegerProperty ();
+  private IntegerProperty ssiProperty() {
+
+    if (ssi == null) ssi = new SimpleIntegerProperty();
     return ssi;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setApf (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    apfProperty ().set (value);
+  public final String getApf() {
+
+    return apfProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getApf ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return apfProperty ().get ();
+  private void setApf(String value) {
+
+    apfProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty apfProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (apf == null)
-      apf = new SimpleStringProperty ();
+  private StringProperty apfProperty() {
+
+    if (apf == null) apf = new SimpleStringProperty();
     return apf;
   }
 
-  // ---------------------------------------------------------------------------------//
-  private void setAttr (String value)
-  // ---------------------------------------------------------------------------------//
-  {
-    attrProperty ().set (value);
+  public final String getAttr() {
+
+    return attrProperty().get();
   }
 
-  // ---------------------------------------------------------------------------------//
-  public final String getAttr ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return attrProperty ().get ();
+  private void setAttr(String value) {
+
+    attrProperty().set(value);
   }
 
-  // ---------------------------------------------------------------------------------//
-  private StringProperty attrProperty ()
-  // ---------------------------------------------------------------------------------//
-  {
-    if (attr == null)
-      attr = new SimpleStringProperty ();
+  private StringProperty attrProperty() {
+
+    if (attr == null) attr = new SimpleStringProperty();
     return attr;
   }
 
-  // ---------------------------------------------------------------------------------//
   @Override
-  public String toString ()
-  // ---------------------------------------------------------------------------------//
-  {
-    return catalogEntry.toString ();
+  public String toString() {
+
+    return catalogEntry.toString();
   }
 }
