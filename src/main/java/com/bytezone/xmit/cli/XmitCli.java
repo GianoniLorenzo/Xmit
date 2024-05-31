@@ -8,11 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.commons.cli.*;
 
 public class XmitCli {
@@ -133,8 +130,8 @@ public class XmitCli {
       CommandLine cmd = parser.parse(options, optionArgs);
 
       File outputDir = new File(".");
-      if (cmd.hasOption("output")) {
-        outputDir = new File(cmd.getOptionValue("output"));
+      if (cmd.hasOption(output)) {
+        outputDir = new File(cmd.getOptionValue(output));
         if (!outputDir.exists()) throw new ParseException("Output folder ("+outputDir+") does not exist");
         else if (!outputDir.isDirectory())
           throw new ParseException("Output folder is not a directory");
@@ -142,47 +139,50 @@ public class XmitCli {
 
       File file = new File(source);
       if (cmd.hasOption(directory)) nFiles = exportDirectory(file, outputDir);
-      if (file.isDirectory()) throw new ParseException("source is a directory, use -dir");
-      else if(! file.getName().toLowerCase().endsWith(".xmit")) throw new IllegalArgumentException(file+" is not a .xmit file");
-      XmitReader reader = XmitReader.fromFile(file);
+      else if (file.isDirectory()) throw new ParseException("source is a directory, use -dir");
+      else if (!file.getName().toLowerCase().endsWith(".xmit"))
+        throw new IllegalArgumentException(file + " is not a .xmit file");
+      else {
+        XmitReader reader = XmitReader.fromFile(file);
 
-      // Validate dataset and members input
+        // Validate dataset and members input
 
-      if (!cmd.hasOption(dataset)) {
-        if (cmd.hasOption(members))
-          throw new ParseException(
-              "Option 'members' is not allowed without a single dataset specified ");
-        nFiles = exportAll(reader, outputDir);
-      } else if (cmd.getOptionValue(dataset).equals("list")) {
-        if (cmd.hasOption(members))
-          throw new ParseException("Option 'members' is not allowed with 'dataset list'");
-        listDataSet(reader);
-      } else {
-        if (!cmd.getOptionValue(dataset).matches("[\\d ]+"))
-          throw new ParseException(
-              "Error parsing dataset list. Found: " + cmd.getOptionValue(dataset));
-        List<Integer> datasetValues =
-            Arrays.stream(cmd.getOptionValue(dataset).split(" ")).map(Integer::parseInt).toList();
-
-        if (datasetValues.size() == 1) {
-          var iDataset = datasetValues.get(0);
-          if (!cmd.hasOption(members)) nFiles = exportAll(reader, outputDir);
-          else if (cmd.getOptionValue(members).equals("list")) {
-            listMembers(reader, iDataset);
-          } else {
-            if (!cmd.getOptionValue(members).matches("[\\d ]+"))
-              throw new ParseException(
-                  "Error parsing dataset list. Found: " + cmd.getOptionValue(dataset));
-            List<Integer> membersValue =
-                Arrays.stream(cmd.getOptionValue(members).split(" "))
-                    .map(Integer::parseInt)
-                    .toList();
-            nFiles = exportMember(reader, outputDir, iDataset, membersValue);
-          }
+        if (!cmd.hasOption(dataset)) {
+          if (cmd.hasOption(members))
+            throw new ParseException(
+                "Option 'members' is not allowed without a single dataset specified ");
+          nFiles = exportAll(reader, outputDir);
+        } else if (cmd.getOptionValue(dataset).equals("list")) {
+          if (cmd.hasOption(members))
+            throw new ParseException("Option 'members' is not allowed with 'dataset list'");
+          listDataSet(reader);
         } else {
-          if (cmd.hasOption("members"))
-            throw new ParseException("Option 'members' is not allowed with multiple datasets'");
-          nFiles = exportAllMember(reader, outputDir, datasetValues);
+          if (!cmd.getOptionValue(dataset).matches("[\\d ]+"))
+            throw new ParseException(
+                "Error parsing dataset list. Found: " + cmd.getOptionValue(dataset));
+          List<Integer> datasetValues =
+              Arrays.stream(cmd.getOptionValue(dataset).split(" ")).map(Integer::parseInt).toList();
+
+          if (datasetValues.size() == 1) {
+            var iDataset = datasetValues.get(0);
+            if (!cmd.hasOption(members)) nFiles = exportAll(reader, outputDir);
+            else if (cmd.getOptionValue(members).equals("list")) {
+              listMembers(reader, iDataset);
+            } else {
+              if (!cmd.getOptionValue(members).matches("[\\d ]+"))
+                throw new ParseException(
+                    "Error parsing dataset list. Found: " + cmd.getOptionValue(dataset));
+              List<Integer> membersValue =
+                  Arrays.stream(cmd.getOptionValue(members).split(" "))
+                      .map(Integer::parseInt)
+                      .toList();
+              nFiles = exportMember(reader, outputDir, iDataset, membersValue);
+            }
+          } else {
+            if (cmd.hasOption("members"))
+              throw new ParseException("Option 'members' is not allowed with multiple datasets'");
+            nFiles = exportAllMember(reader, outputDir, datasetValues);
+          }
         }
       }
       System.out.println(nFiles +" files exported in "+outputDir);
@@ -201,7 +201,7 @@ public class XmitCli {
 
     List<File> fileList = List.of(filesInDir);
     for(var file : fileList){
-      if(!file.getName().endsWith(".xmit")) continue;
+      if(!file.getName().toLowerCase().endsWith(".xmit")) continue;
       XmitReader reader = XmitReader.fromFile(file);
       nFiles += exportAll(reader, outDir);
     }
