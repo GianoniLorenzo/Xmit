@@ -26,18 +26,20 @@ public class XmitTree extends TreeView<TreeNodeData> implements SaveState, FontC
   private static String SEPARATOR = "/";      // is this the best choice?
   static final boolean merging = true;
 
+  private final String iconPath = "/icons/";
+
   private final Image zipImage =
-      new Image (getClass ().getResourceAsStream ("/icons/zip-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"zip-icon.png"));
   private final Image xImage =
-      new Image (getClass ().getResourceAsStream ("/icons/X-green-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"X-green-icon.png"));
   private final Image mImage =
-      new Image (getClass ().getResourceAsStream ("/icons/M-blue-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"M-blue-icon.png"));
   private final Image dImage =
-      new Image (getClass ().getResourceAsStream ("/icons/D-pink-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"D-pink-icon.png"));
   private final Image tImage =
-      new Image (getClass ().getResourceAsStream ("/icons/T-black-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"T-black-icon.png"));
   private final Image folderImage =
-      new Image (getClass ().getResourceAsStream ("/icons/folder-icon.png"));
+      new Image (getClass ().getResourceAsStream (iconPath+"folder-icon.png"));
   private Font font;
 
   private final MultipleSelectionModel<TreeItem<TreeNodeData>> model = getSelectionModel ();
