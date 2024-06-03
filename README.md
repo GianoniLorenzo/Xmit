@@ -16,27 +16,32 @@
 ![Linux](resources/xmit-linux.png?raw=true "Linux")
 
 ## Installation
-- Download and install [Java 17](https://jdk.java.net/17/) and [JavaFX 17](https://gluonhq.com/products/javafx/), which are now separate downloads.
-- Download [XmitApp](https://github.com/dmolony/xmit/releases).
-- Create executable run file.  
-#### MacOS or Linux shell file  
+- Download and install Java >= 17
+- Download [XmitApp](https://github.com/GianoniLorenzo/Xmit/releases) (CLI or GUI). 
+
+#### Launch CLI app
 
 ```
-/path/to/jdk-17.jdk/Contents/Home/bin/java        \
---module-path /path/to/javafx-sdk-17/lib          \
---add-modules=javafx.controls                     \
--Dfile.encoding=UTF-8                             \
--jar /path/to/XmitApp.jar
+Usage: xmit-cli.jar source <options>
+ -d,--dataset <arg>   Dataset argument
+ -dir,--directory     Extract the whole directory
+ -m,--members <arg>   Members argument
+ -o,--output <arg>    Output folder
+
+```
+
+##### Export all members of an xmit file
+
+```
+java -jar xmit-cli.jar <file.xmit> -o <output-dir>
+```
+
+#### Launch GUI App on MacOS - Linux - Windows 
+
+```
+java -jar /path/to/xmit-gui.jar
 ```  
-#### Windows batch file  
 
-```
-C:\path\to\jdk-17\bin\java.exe                    \
---module-path C:\path\to\javafx-sdk-17\lib        \
---add-modules=javafx.controls                     \
--Dfile.encoding=UTF-8                             \
--jar C:\path\to\XmitApp.jar
-```
 ### First execution
 Read the helpful message.  
 <img src="resources/xmit-folder1.png" alt="alert" width="500"/>  
