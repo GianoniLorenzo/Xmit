@@ -203,8 +203,8 @@ class TreeNodeData implements Iterable<Dataset> {
 
   private void createReader() {
 
-    if (isMember()) reader = new XmitReader(member);
-    else if (isXmit()) reader = new XmitReader(file);
+    if (isMember()) reader = new AbstractXmitReader(member);
+    else if (isXmit()) reader = new AbstractXmitReader(file);
     else if (isTape()) reader = new AwsTapeReader(file);
     else {
       System.out.println("Unknown suffix in createReader(): " + suffix);

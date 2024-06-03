@@ -4,7 +4,7 @@ import com.bytezone.xmit.BasicModule;
 import com.bytezone.xmit.CatalogEntry;
 import com.bytezone.xmit.LoadModule;
 import com.bytezone.xmit.PdsDataset;
-import com.bytezone.xmit.XmitReader;
+import com.bytezone.xmit.AbstractXmitReader;
 import com.bytezone.xmit.gui.XmitTree.TreeNodeListener;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,7 @@ class HeadersTab extends XmitTextTab implements TreeNodeListener {
     if (nodeData == null || !nodeData.isDataset()) return lines;
 
     if (nodeData.isXmit()) {
-      for (var controlRecord : ((XmitReader) nodeData.getReader()).getControlRecords())
+      for (var controlRecord : ((AbstractXmitReader) nodeData.getReader()).getControlRecords())
         lines.add(controlRecord.toString());
     } else if (nodeData.isTape()) {
       var pdsDataset = (PdsDataset) nodeData.getDataset();
